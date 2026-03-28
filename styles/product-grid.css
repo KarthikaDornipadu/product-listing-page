@@ -1,0 +1,57 @@
+/* ========================================
+   PRODUCT GRID STYLES
+   ======================================== */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+  width: 100%;
+}
+
+.grid-empty {
+  text-align: center;
+  padding: var(--space-3xl);
+  color: var(--color-gray-600);
+}
+
+.grid-skeleton {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.skeleton-card {
+  background-color: var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  height: 24rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-skeleton {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .grid-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .skeleton-card {
+    height: 16rem;
+  }
+}

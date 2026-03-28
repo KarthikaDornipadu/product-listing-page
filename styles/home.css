@@ -1,0 +1,102 @@
+/* ========================================
+   HOME PAGE STYLES
+   ======================================== */
+
+.hero-section {
+  background: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
+  color: var(--color-white);
+  padding: var(--space-3xl) var(--space-md);
+}
+
+.hero-content {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-title {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-lg);
+}
+
+.hero-subtitle {
+  font-size: var(--font-size-xl);
+  color: rgb(191, 219, 254);
+  max-width: 42rem;
+}
+
+.categories-section {
+  background-color: var(--color-gray-50);
+  padding: var(--space-2xl) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.categories-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.categories-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-lg);
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.category-link {
+  background-color: var(--color-white);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  text-transform: capitalize;
+  transition: all var(--transition-fast);
+}
+
+.category-link:hover {
+  box-shadow: var(--shadow-lg);
+  color: var(--color-primary);
+}
+
+.products-section {
+  padding: var(--space-3xl) var(--space-md);
+}
+
+.products-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.products-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-2xl);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
