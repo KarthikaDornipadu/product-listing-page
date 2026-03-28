@@ -1,6 +1,11 @@
 import { Product } from '@/types/product';
 
 const API_BASE_URL = 'https://fakestoreapi.com';
+const USD_TO_INR_RATE = 83; // Approximate conversion rate
+
+export function convertUSDToINR(usd: number): number {
+  return usd * USD_TO_INR_RATE;
+}
 
 export async function getAllProducts(): Promise<Product[]> {
   try {
@@ -30,9 +35,7 @@ export async function getProductById(id: number): Promise<Product | null> {
 
 export async function getCategories(): Promise<string[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/products/categories`, {
-      next: { revalidate: 3600 },
-    });
+    const response = await fetch(`${API_BASE_URL}/products/categories`);
     if (!response.ok) throw new Error('Failed to fetch categories');
     return response.json();
   } catch (error) {
@@ -44,10 +47,7 @@ export async function getCategories(): Promise<string[]> {
 export async function getProductsByCategory(category: string): Promise<Product[]> {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/products/category/${category}`,
-      {
-        next: { revalidate: 3600 },
-      }
+      `${API_BASE_URL}/products/category/${category}`
     );
     if (!response.ok) throw new Error('Failed to fetch products by category');
     return response.json();

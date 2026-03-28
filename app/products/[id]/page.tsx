@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getProductById, getAllProducts } from "@/lib/fakestore";
+import { getProductById, getAllProducts, convertUSDToINR } from "@/lib/fakestore";
 import { notFound } from "next/navigation";
 import { StarIcon } from "@/components/Icons";
 import '@/styles/product-detail.css';
@@ -120,7 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Price */}
             <div style={{ marginBottom: 'var(--space-lg)' }}>
               <div className="product-price">
-                ${product.price.toFixed(2)}
+                ₹{convertUSDToINR(product.price).toFixed(2)}
               </div>
               <div className="product-category">
                 <span className="product-category-label">Category:</span>
@@ -148,7 +148,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <li>
                   <span className="details-label">Price:</span>
                   {" "}
-                  ${product.price.toFixed(2)}
+                  ₹{convertUSDToINR(product.price).toFixed(2)}
                 </li>
                 <li>
                   <span className="details-label">Rating:</span>
@@ -198,8 +198,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             offers: {
               "@type": "Offer",
               url: `https://product-store.app/products/${product.id}`,
-              priceCurrency: "USD",
-              price: product.price.toFixed(2),
+              priceCurrency: "INR",
+              price: convertUSDToINR(product.price).toFixed(2),
               availability: "https://schema.org/InStock",
             },
             aggregateRating: {

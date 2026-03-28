@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/types/product';
 import { StarIcon } from './Icons';
+import { convertUSDToINR } from '@/lib/fakestore';
 import '@/styles/product-card.css';
 
 interface ProductCardProps {
@@ -52,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
           <span className="product-card-price">
-            ${product.price.toFixed(2)}
+            ₹{convertUSDToINR(product.price).toFixed(2)}
           </span>
         </div>
       </div>
