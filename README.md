@@ -1,6 +1,6 @@
 # Product Store - E-Commerce PLP
 
-A modern, responsive Product Listing Page (PLP) built with Next.js 16, React 19, and Tailwind CSS. This project demonstrates server-side rendering (SSR), responsive design, SEO optimization, and clean code architecture.
+A modern, responsive Product Listing Page (PLP) built with Next.js 16, React 19, and Plain CSS. This project demonstrates server-side rendering (SSR), responsive design, SEO optimization, and clean code architecture without using external CSS frameworks like Tailwind.
 
 ## 🌟 Features
 
@@ -8,7 +8,7 @@ A modern, responsive Product Listing Page (PLP) built with Next.js 16, React 19,
 - **Server-Side Rendering (SSR)**: Built with Next.js App Router for optimal performance
 - **Incremental Static Regeneration (ISR)**: Data revalidates every hour for fresh content
 - **Image Optimization**: Next.js Image component with lazy loading
-- **Minimal Dependencies**: Uses only essential packages (React, Next.js, Tailwind)
+- **No CSS Frameworks**: Uses only Plain CSS for maximum performance and minimum DOM size
 - **Clean Code Structure**: Well-organized components, types, and utilities
 
 ### Design & UX
@@ -45,7 +45,7 @@ A modern, responsive Product Listing Page (PLP) built with Next.js 16, React 19,
 
 - **Framework**: Next.js 16.2.1
 - **UI Library**: React 19.2.4
-- **Styling**: Tailwind CSS 4 with PostCSS
+- **Styling**: Plain CSS (Vanilla CSS)
 - **Language**: TypeScript 5
 - **API**: FakeStore API (mock data)
 - **Linting**: ESLint 9
@@ -178,7 +178,7 @@ The application is deployed and accessible at: [Your Netlify URL will go here]
 
 - **Image Optimization**: Next.js Image component with lazy loading
 - **Code Splitting**: Automatic with App Router
-- **CSS Optimization**: Tailwind CSS with purging
+- **CSS Optimization**: Native CSS variables and modules
 - **Font Optimization**: Google Fonts with next/font
 - **Lazy Loading**: Images and Suspense boundaries
 - **ISR**: 1-hour revalidation for data freshness
@@ -199,13 +199,11 @@ The application is deployed and accessible at: [Your Netlify URL will go here]
 - react-dom@19.2.4
 
 ### Development
-- @tailwindcss/postcss@^4
 - @types/node@^20
 - @types/react@^19
 - @types/react-dom@^19
 - eslint@^9
 - eslint-config-next@16.2.1
-- tailwindcss@^4
 - typescript@^5
 
 ## 🐛 Known Limitatons
@@ -220,4 +218,4 @@ This project is part of the Appscrip recruitment task.
 
 ---
 
-**Built with ❤️ using Next.js 16, React 19, and Tailwind CSS**
+
