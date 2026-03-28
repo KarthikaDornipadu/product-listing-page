@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getProductsByCategory, getCategories } from "@/lib/fakestore";
+import { getProductsByCategory, getCategories, formatCategoryName } from "@/lib/fakestore";
 import ProductGrid from "@/components/ProductGrid";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -25,16 +25,16 @@ export async function generateMetadata(
   { params }: CategoryPageProps
 ): Promise<Metadata> {
   const { category } = await params;
-
-  const categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+  const decodedCategory = decodeURIComponent(category);
+  const categoryName = formatCategoryName(decodedCategory);
 
   return {
-    title: `${categoryTitle} Products - Product Store`,
-    description: `Browse our collection of ${categoryTitle.toLowerCase()} products. Find the best deals on quality items at Product Store.`,
-    keywords: `${categoryTitle}, products, shopping, store, ${category}`,
+    title: `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Products - Product Store`,
+    description: `Browse our collection of ${categoryName.toLowerCase()} products. Find the best deals on quality items at Product Store.`,
+    keywords: `${categoryName}, products, shopping, store, ${category}`,
     openGraph: {
-      title: `${categoryTitle} Products - Product Store`,
-      description: `Browse our collection of ${categoryTitle.toLowerCase()} products.`,
+      title: `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Products - Product Store`,
+      description: `Browse our collection of ${categoryName.toLowerCase()} products.`,
       type: "website",
     },
   };
@@ -57,6 +57,7 @@ async function CategoryProducts({ category }: { category: string }) {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
   const categories = await getCategories();
+  const categoryName = formatCategoryName(category);
 
   // Validate category exists
   if (!categories.includes(category)) {
@@ -74,16 +75,16 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </Link>
         <span className="breadcrumb-separator">/</span>
         <span className="breadcrumb-current" style={{ textTransform: 'capitalize' }}>
-          {category}
+          {categoryName}
         </span>
       </div>
 
       {/* Category Header */}
       <div className="category-header">
         <div className="category-header-content">
-          <h1 className="category-header-title">{category}</h1>
+          <h1 className="category-header-title">{categoryName}</h1>
           <p className="category-header-subtitle">
-            Explore our collection of premium {category} products
+            Explore our collection of premium {categoryName} products
           </p>
         </div>
       </div>
@@ -99,8 +100,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               className={`category-nav-link ${
                 cat === category ? 'active' : 'inactive'
               }`}
+              style={{ textTransform: 'capitalize' }}
             >
-              {cat}
+              {formatCategoryName(cat)}
             </Link>
           ))}
         </div>

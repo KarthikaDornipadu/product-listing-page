@@ -212,9 +212,6 @@ The application is deployed and accessible at: [Your Netlify URL will go here]
 - Cart functionality is UI-only (no backend integration)
 - Search functionality not implemented
 
-## 📄 License
-
-This project is part of the Appscrip recruitment task.
 
 ---
 

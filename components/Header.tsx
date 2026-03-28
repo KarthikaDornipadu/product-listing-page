@@ -1,9 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import { useCart } from '@/context/CartContext';
 import '@/styles/header.css';
 
 export default function Header() {
+  const { cartCount } = useCart();
+
   return (
     <header className="header">
       <div className="header-container">
@@ -18,6 +21,11 @@ export default function Header() {
             <Link href="/#categories" className="nav-link">
               Categories
             </Link>
+            <div className="cart-link" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <span style={{ fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--color-gray-600)', background: 'var(--color-gray-100)', padding: 'var(--space-xs) var(--space-sm)', borderRadius: 'var(--radius-full)' }}>
+                Cart ({cartCount})
+              </span>
+            </div>
           </nav>
           <div className="header-mobile-menu">
             <button className="menu-toggle" aria-label="Toggle menu">

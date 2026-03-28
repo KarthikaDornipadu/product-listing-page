@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getProductById, getAllProducts, convertUSDToINR } from "@/lib/fakestore";
+import { getProductById, getAllProducts, convertUSDToINR, formatCategoryName } from "@/lib/fakestore";
 import { notFound } from "next/navigation";
 import { StarIcon } from "@/components/Icons";
+import AddToCartButton from "@/components/AddToCartButton";
 import '@/styles/product-detail.css';
 
 interface ProductPageProps {
@@ -34,10 +35,12 @@ export async function generateMetadata(
     };
   }
 
+  const categoryName = formatCategoryName(product.category);
+
   return {
     title: `${product.title} - Product Store`,
     description: product.description,
-    keywords: `${product.title}, ${product.category}, shopping, store`,
+    keywords: `${product.title}, ${categoryName}, shopping, store`,
     openGraph: {
       title: product.title,
       description: product.description,
@@ -65,6 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const imageUrl = product.image || "https://via.placeholder.com/500x500?text=Product";
   const rating = product.rating?.rate || 0;
   const ratingCount = product.rating?.count || 0;
+  const categoryName = formatCategoryName(product.category);
 
   return (
     <div style={{ backgroundColor: 'var(--color-white)' }}>
@@ -79,7 +83,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           className="breadcrumb-link"
           style={{ textTransform: 'capitalize' }}
         >
-          {product.category}
+          {categoryName}
         </Link>
         <span className="breadcrumb-separator">/</span>
         <span className="breadcrumb-current">{product.title}</span>
@@ -124,7 +128,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
               <div className="product-category">
                 <span className="product-category-label">Category:</span>
-                <span className="product-category-name"> {product.category}</span>
+                <span className="product-category-name" style={{ textTransform: 'capitalize' }}> {categoryName}</span>
               </div>
             </div>
 
@@ -143,7 +147,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <li>
                   <span className="details-label">Category:</span>
                   {" "}
-                  <span style={{ textTransform: 'capitalize' }}>{product.category}</span>
+                  <span style={{ textTransform: 'capitalize' }}>{categoryName}</span>
                 </li>
                 <li>
                   <span className="details-label">Price:</span>
@@ -159,10 +163,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Actions */}
-            <div className="product-actions">
-              <button className="btn-add-cart">
-                Add to Cart
-              </button>
+            <div className="product-actions" style={{ marginBottom: 'var(--space-xl)' }}>
+              <AddToCartButton product={product} />
               <button className="btn-wishlist">
                 Add to Wishlist
               </button>
@@ -174,7 +176,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 href={`/category/${product.category}`}
                 className="related-link"
               >
-                ← View more {product.category} products
+                ← View more {categoryName} products
               </Link>
             </div>
           </div>

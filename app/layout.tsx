@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Product Store - Shop Quality Products Online",
-  description: "Discover a wide selection of quality products at competitive prices. Browse electronics, clothing, jewelry, and more.",
+  description: "Discover a wide selection of quality products at competitive prices. Browse electronics, clothing, jwellery, and more.",
   keywords: "products, shopping, store, online shopping, electronics",
   authors: [{ name: "Product Store" }],
   openGraph: {
@@ -83,9 +84,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

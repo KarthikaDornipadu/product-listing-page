@@ -7,6 +7,11 @@ export function convertUSDToINR(usd: number): number {
   return usd * USD_TO_INR_RATE;
 }
 
+export function formatCategoryName(category: string): string {
+  if (category.toLowerCase() === 'jewelery') return 'jwellery';
+  return category;
+}
+
 export async function getAllProducts(): Promise<Product[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/products`, {
