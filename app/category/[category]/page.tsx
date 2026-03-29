@@ -12,8 +12,8 @@ interface CategoryPageProps {
   }>;
 }
 
-// Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
-export const revalidate = 300;
+// Force dynamic rendering to ensure fresh data in production
+export const dynamic = 'force-dynamic';
 
 export async function generateStaticParams() {
   const categories = await getCategories();

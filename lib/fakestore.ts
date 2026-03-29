@@ -13,15 +13,16 @@ export function formatCategoryName(category: string): string {
   return category;
 }
 
-const fetchOptions = {
+const fetchOptions: RequestInit = {
   headers: {
     'Accept': 'application/json',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
   },
-  next: { revalidate: 300 },
+  // Use no-store to avoid stale empty results in some deployment environments Like Netlify
+  cache: 'no-store',
 };
 
-// Fallback data when API is down
+// Fallback data when API is down or blocking requests
 const MOCK_PRODUCTS: Product[] = [
   {
     id: 1,
@@ -49,26 +50,50 @@ const MOCK_PRODUCTS: Product[] = [
     category: "men's clothing",
     image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
     rating: { rate: 4.7, count: 500 }
+  },
+  {
+    id: 4,
+    title: "Mens Casual Slim Fit",
+    price: 15.99,
+    description: "The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+    category: "men's clothing",
+    image: "https://fakestoreapi.com/img/71YXzeWusdL._AC_UY879_.jpg",
+    rating: { rate: 2.1, count: 430 }
+  },
+  {
+    id: 5,
+    title: "John Hardy Women's Legends Naga Gold & Silver Dragon Station Chain Bracelet",
+    price: 695,
+    description: "From our Legends Collection, the Naga was inspired by the mythical water dragon that protects the ocean's pearl. Wear facing inward to be bestowed with love and abundance, or outward for protection.",
+    category: "jewelery",
+    image: "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_.jpg",
+    rating: { rate: 4.6, count: 400 }
+  },
+  {
+    id: 6,
+    title: "Solid Gold Petite Micropave",
+    price: 168,
+    description: "Satisfaction Guaranteed. Return or exchange any order within 30 days.Designed and sold by Hafeez Center in the United States. Satisfaction Guaranteed. Return or exchange any order within 30 days.",
+    category: "jewelery",
+    image: "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_.jpg",
+    rating: { rate: 3.9, count: 70 }
   }
 ];
 
 export async function getAllProducts(): Promise<Product[]> {
   const url = `${API_BASE_URL}/products`;
-  console.log('Fetching all products from:', url);
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-      console.warn(`Initial fetch failed (${response.status}). Retrying without cache...`);
-      // Retry once without cache
-      const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
-      if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
-      return await retryResponse.json();
+        throw new Error(`API returned ${response.status}`);
     }
     const data = await response.json();
-    console.log(`Successfully fetched ${data.length} products`);
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('API returned empty or invalid data');
+    }
     return data;
   } catch (error) {
-    console.error('API Fetch failed, using mock data:', error);
+    console.warn(`getAllProducts failed, using mock data:`, error instanceof Error ? error.message : error);
     return MOCK_PRODUCTS;
   }
 }
@@ -78,13 +103,11 @@ export async function getProductById(id: number): Promise<Product | null> {
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
-        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
-        return await retryResponse.json();
+        throw new Error(`API returned ${response.status}`);
     }
     return response.json();
   } catch (error) {
-    console.error(`Error in getProductById for id ${id}:`, error);
+    console.warn(`getProductById with id ${id} failed, checking mock data:`, error);
     return MOCK_PRODUCTS.find(p => p.id === id) || null;
   }
 }
@@ -94,13 +117,15 @@ export async function getCategories(): Promise<string[]> {
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
-        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
-        return await retryResponse.json();
+        throw new Error(`API returned ${response.status}`);
     }
-    return response.json();
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('API returned empty or invalid categories');
+    }
+    return data;
   } catch (error) {
-    console.error('Error in getCategories:', error);
+    console.warn('getCategories failed, using fallback:', error);
     return ["electronics", "jewelery", "men's clothing", "women's clothing"];
   }
 }
@@ -110,13 +135,16 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
-        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
-        return await retryResponse.json();
+        throw new Error(`API returned ${response.status}`);
     }
-    return response.json();
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('API returned empty or invalid category data');
+    }
+    return data;
   } catch (error) {
-    console.error(`Error in getProductsByCategory for category ${category}:`, error);
+    console.warn(`getProductsByCategory with category ${category} failed, using mock data:`, error);
     return MOCK_PRODUCTS.filter(p => p.category === category);
   }
 }
+

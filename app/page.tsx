@@ -5,8 +5,8 @@ import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
 import '@/styles/home.css';
 
-// Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
-export const revalidate = 300;
+// Force dynamic rendering to ensure fresh data in production
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Product Store - Shop Quality Products Online",
