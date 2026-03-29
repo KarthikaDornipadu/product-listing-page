@@ -16,9 +16,41 @@ export function formatCategoryName(category: string): string {
 const fetchOptions = {
   headers: {
     'Accept': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
   },
   next: { revalidate: 300 },
 };
+
+// Fallback data when API is down
+const MOCK_PRODUCTS: Product[] = [
+  {
+    id: 1,
+    title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
+    price: 109.95,
+    description: "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
+    category: "men's clothing",
+    image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+    rating: { rate: 3.9, count: 120 }
+  },
+  {
+    id: 2,
+    title: "Mens Casual Premium Slim Fit T-Shirts",
+    price: 22.3,
+    description: "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The henley style round neckline includes a three-button placket.",
+    category: "men's clothing",
+    image: "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg",
+    rating: { rate: 4.1, count: 259 }
+  },
+  {
+    id: 3,
+    title: "Mens Cotton Jacket",
+    price: 55.99,
+    description: "great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.",
+    category: "men's clothing",
+    image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
+    rating: { rate: 4.7, count: 500 }
+  }
+];
 
 export async function getAllProducts(): Promise<Product[]> {
   const url = `${API_BASE_URL}/products`;
@@ -26,17 +58,18 @@ export async function getAllProducts(): Promise<Product[]> {
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-      const errorText = await response.text().catch(() => 'No error body');
-      console.error(`Fetch failed with status: ${response.status}. Error: ${errorText}`);
-      throw new Error(`Failed to fetch products: ${response.status}`);
+      console.warn(`Initial fetch failed (${response.status}). Retrying without cache...`);
+      // Retry once without cache
+      const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
+      if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
+      return await retryResponse.json();
     }
     const data = await response.json();
     console.log(`Successfully fetched ${data.length} products`);
     return data;
   } catch (error) {
-    console.error('Error in getAllProducts:', error);
-    // Return empty array as fallback, but the log will now show the actual error on the server
-    return [];
+    console.error('API Fetch failed, using mock data:', error);
+    return MOCK_PRODUCTS;
   }
 }
 
@@ -45,14 +78,14 @@ export async function getProductById(id: number): Promise<Product | null> {
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-      const errorText = await response.text().catch(() => 'No error body');
-      console.error(`Fetch product ${id} failed with status: ${response.status}. Error: ${errorText}`);
-      throw new Error(`Failed to fetch product: ${response.status}`);
+        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
+        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
+        return await retryResponse.json();
     }
     return response.json();
   } catch (error) {
     console.error(`Error in getProductById for id ${id}:`, error);
-    return null;
+    return MOCK_PRODUCTS.find(p => p.id === id) || null;
   }
 }
 
@@ -61,14 +94,14 @@ export async function getCategories(): Promise<string[]> {
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-      const errorText = await response.text().catch(() => 'No error body');
-      console.error(`Fetch categories failed with status: ${response.status}. Error: ${errorText}`);
-      throw new Error(`Failed to fetch categories: ${response.status}`);
+        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
+        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
+        return await retryResponse.json();
     }
     return response.json();
   } catch (error) {
     console.error('Error in getCategories:', error);
-    return [];
+    return ["electronics", "jewelery", "men's clothing", "women's clothing"];
   }
 }
 
@@ -77,13 +110,13 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   try {
     const response = await fetch(url, fetchOptions);
     if (!response.ok) {
-      const errorText = await response.text().catch(() => 'No error body');
-      console.error(`Fetch products by category ${category} failed with status: ${response.status}. Error: ${errorText}`);
-      throw new Error(`Failed to fetch products by category: ${response.status}`);
+        const retryResponse = await fetch(url, { ...fetchOptions, cache: 'no-store' });
+        if (!retryResponse.ok) throw new Error(`API returned ${retryResponse.status}`);
+        return await retryResponse.json();
     }
     return response.json();
   } catch (error) {
     console.error(`Error in getProductsByCategory for category ${category}:`, error);
-    return [];
+    return MOCK_PRODUCTS.filter(p => p.category === category);
   }
 }
