@@ -12,7 +12,8 @@ interface CategoryPageProps {
   }>;
 }
 
-export const revalidate = 3600;
+// Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
+export const revalidate = 300;
 
 export async function generateStaticParams() {
   const categories = await getCategories();

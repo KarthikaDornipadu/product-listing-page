@@ -8,56 +8,82 @@ export function convertUSDToINR(usd: number): number {
 }
 
 export function formatCategoryName(category: string): string {
-  if (category.toLowerCase() === 'jewelery') return 'jwellery';
+  // The API uses "jewelery" (misspelled). We support it but can display it better if needed.
+  if (category.toLowerCase() === 'jewelery') return 'jewelry';
   return category;
 }
 
+const fetchOptions = {
+  headers: {
+    'Accept': 'application/json',
+  },
+  next: { revalidate: 300 },
+};
+
 export async function getAllProducts(): Promise<Product[]> {
+  const url = `${API_BASE_URL}/products`;
+  console.log('Fetching all products from:', url);
   try {
-    const response = await fetch(`${API_BASE_URL}/products`, {
-      next: { revalidate: 3600 }, // Revalidate every hour for SSR
-    });
-    if (!response.ok) throw new Error('Failed to fetch products');
-    return response.json();
+    const response = await fetch(url, fetchOptions);
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => 'No error body');
+      console.error(`Fetch failed with status: ${response.status}. Error: ${errorText}`);
+      throw new Error(`Failed to fetch products: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(`Successfully fetched ${data.length} products`);
+    return data;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error in getAllProducts:', error);
+    // Return empty array as fallback, but the log will now show the actual error on the server
     return [];
   }
 }
 
 export async function getProductById(id: number): Promise<Product | null> {
+  const url = `${API_BASE_URL}/products/${id}`;
   try {
-    const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-      next: { revalidate: 3600 },
-    });
-    if (!response.ok) throw new Error('Failed to fetch product');
+    const response = await fetch(url, fetchOptions);
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => 'No error body');
+      console.error(`Fetch product ${id} failed with status: ${response.status}. Error: ${errorText}`);
+      throw new Error(`Failed to fetch product: ${response.status}`);
+    }
     return response.json();
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error(`Error in getProductById for id ${id}:`, error);
     return null;
   }
 }
 
 export async function getCategories(): Promise<string[]> {
+  const url = `${API_BASE_URL}/products/categories`;
   try {
-    const response = await fetch(`${API_BASE_URL}/products/categories`);
-    if (!response.ok) throw new Error('Failed to fetch categories');
+    const response = await fetch(url, fetchOptions);
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => 'No error body');
+      console.error(`Fetch categories failed with status: ${response.status}. Error: ${errorText}`);
+      throw new Error(`Failed to fetch categories: ${response.status}`);
+    }
     return response.json();
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error('Error in getCategories:', error);
     return [];
   }
 }
 
 export async function getProductsByCategory(category: string): Promise<Product[]> {
+  const url = `${API_BASE_URL}/products/category/${category}`;
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/products/category/${category}`
-    );
-    if (!response.ok) throw new Error('Failed to fetch products by category');
+    const response = await fetch(url, fetchOptions);
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => 'No error body');
+      console.error(`Fetch products by category ${category} failed with status: ${response.status}. Error: ${errorText}`);
+      throw new Error(`Failed to fetch products by category: ${response.status}`);
+    }
     return response.json();
   } catch (error) {
-    console.error('Error fetching products by category:', error);
+    console.error(`Error in getProductsByCategory for category ${category}:`, error);
     return [];
   }
 }

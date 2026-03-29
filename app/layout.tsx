@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Product Store - Shop Quality Products Online",
-  description: "Discover a wide selection of quality products at competitive prices. Browse electronics, clothing, jwellery, and more.",
-  keywords: "products, shopping, store, online shopping, electronics",
+  description: "Discover a wide selection of quality products at competitive prices. Browse electronics, clothing, jewelry, and more.",
+  keywords: "products, shopping, store, online shopping, electronics, jewelry",
   authors: [{ name: "Product Store" }],
   openGraph: {
     title: "Product Store - Shop Quality Products Online",

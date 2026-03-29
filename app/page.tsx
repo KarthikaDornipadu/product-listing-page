@@ -5,12 +5,12 @@ import SearchInput from "@/components/SearchInput";
 import { Suspense } from "react";
 import '@/styles/home.css';
 
-// Enable ISR (Incremental Static Regeneration) - revalidate every hour
-export const revalidate = 3600;
+// Enable ISR (Incremental Static Regeneration) - revalidate every 5 minutes
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Product Store - Shop Quality Products Online",
-  description: "Browse our extensive collection of products including electronics, clothing, jwellery, and more. Find everything you need at competitive prices.",
+  description: "Browse our extensive collection of products including electronics, clothing, jewelry, and more. Find everything you need at competitive prices.",
   keywords: "products, shopping, store, online store, e-commerce",
   openGraph: {
     title: "Product Store - Shop Quality Products Online",
